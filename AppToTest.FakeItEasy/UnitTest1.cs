@@ -14,6 +14,7 @@ namespace AppToTest.FakeItEasy
         {
             string someString = "SomeString";
             int someNumberICareAbout = 42;
+            int anotherNumberICareAbout = 7;
 
             var SomethingToTestMock = A.Fake<ISomethingToTest>();
             A.CallTo(() => SomethingToTestMock.GiveItBackToMe(someString)).Returns(someString);
@@ -29,6 +30,10 @@ namespace AppToTest.FakeItEasy
             Assert.That(SomethingToTestMock.SomeNumberICareAbout, Is.EqualTo(someNumberICareAbout));
             A.CallTo(() => SomethingToTestMock.SomethingToBeCalled(someString)).MustHaveHappened();
             A.CallTo(() => SomethingToTestMock.SomethingToBeIgnored(someString)).MustNotHaveHappened();
+
+            // FakeItEasy handles appears to handle properties automatically
+            SomethingToTestMock.SomeNumberICareAbout = anotherNumberICareAbout;
+            Assert.That(SomethingToTestMock.SomeNumberICareAbout, Is.EqualTo(anotherNumberICareAbout));
         }
     }
 }
