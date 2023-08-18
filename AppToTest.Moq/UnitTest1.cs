@@ -1,4 +1,5 @@
 using Moq;
+using NUnit.Framework;
 
 namespace AppToTest.Moq
 {
@@ -10,16 +11,22 @@ namespace AppToTest.Moq
         }
 
         [Test]
-        public void Test1()
+        public void Call_GiveItBackToMe()
         {
             string someString = "SomeString";
+            var SomethingToTestMock = new Mock<ISomethingToTest>();
+            SomethingToTestMock.Setup(x => x.GiveItBackToMe(someString)).Returns(someString);
+
+            Assert.That(SomethingToTestMock.Object.GiveItBackToMe(someString), Is.EqualTo(someString));
+        }
+
+        [Test]
+        public void Call_SomeNumberICareAbout()
+        {
             int someNumberICareAbout = 42;
             int anotherNumberICareAbout = 7;
 
             var SomethingToTestMock = new Mock<ISomethingToTest>();
-            SomethingToTestMock.Setup(x => x.GiveItBackToMe(someString)).Returns(someString);
-            SomethingToTestMock.Setup(x => x.ReturnTrue()).Returns(true);
-            SomethingToTestMock.Setup(x => x.ReturnFalse()).Returns(false);
 
             // I had to man handle the propety with MOQ
             SomethingToTestMock.SetupSet(x => x.SomeNumberICareAbout = someNumberICareAbout).Verifiable();
@@ -29,17 +36,49 @@ namespace AppToTest.Moq
                 .Returns(anotherNumberICareAbout);
 
             SomethingToTestMock.Object.SomeNumberICareAbout = someNumberICareAbout;
-            SomethingToTestMock.Object.SomethingToBeCalled(someString);
-
-            Assert.That(SomethingToTestMock.Object.GiveItBackToMe(someString), Is.EqualTo(someString));
-            Assert.That(SomethingToTestMock.Object.ReturnTrue(), Is.True);
-            Assert.That(SomethingToTestMock.Object.ReturnFalse(), Is.False);
             Assert.That(SomethingToTestMock.Object.SomeNumberICareAbout, Is.EqualTo(someNumberICareAbout));
-            SomethingToTestMock.Verify(x => x.SomethingToBeCalled(someString), Times.Once);
-            SomethingToTestMock.Verify(x => x.SomethingToBeIgnored(It.IsAny<string>()), Times.Never);
 
             SomethingToTestMock.Object.SomeNumberICareAbout = anotherNumberICareAbout;
             Assert.That(SomethingToTestMock.Object.SomeNumberICareAbout, Is.EqualTo(anotherNumberICareAbout));
+        }
+
+        [Test]
+        public void Check_CallsCount()
+        {
+            string someString = "SomeString";
+            var SomethingToTestMock = new Mock<ISomethingToTest>();
+
+            SomethingToTestMock.Object.SomethingToBeCalled(someString);
+
+            SomethingToTestMock.Verify(x => x.SomethingToBeCalled(someString), Times.Once);
+            SomethingToTestMock.Verify(x => x.SomethingToBeIgnored(It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public void Call_BooleanMethods()
+        {
+            var SomethingToTestMock = new Mock<ISomethingToTest>();
+            SomethingToTestMock.Setup(x => x.ReturnTrue()).Returns(true);
+            SomethingToTestMock.Setup(x => x.ReturnFalse()).Returns(false);
+
+            Assert.That(SomethingToTestMock.Object.ReturnTrue(), Is.True);
+            Assert.That(SomethingToTestMock.Object.ReturnFalse(), Is.False);
+        }
+
+        [Test]
+        public void Call_GiveItBackToMeAltered()
+        {
+            string someString = "SomeString";
+            string alterPrefix = "Altered";
+            var SomethingToTestMock = new Mock<ISomethingToTest>();
+
+            SomethingToTestMock.Setup(x => x.GiveItBackToMeAltered(It.IsAny<string>()))
+                .Returns((string it) =>
+                {
+                    return $"{alterPrefix} {it}";
+                });
+
+            Assert.That(SomethingToTestMock.Object.GiveItBackToMeAltered(someString), Is.EqualTo($"{alterPrefix} {someString}"));
         }
     }
 }

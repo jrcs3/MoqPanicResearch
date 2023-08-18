@@ -31,6 +31,11 @@ namespace AppToTest
             throw new NotImplementedException();
         }
 
+        public string GiveItBackToMeAltered(string it)
+        {
+            throw new NotImplementedException();
+        }
+
         public int SomeNumberICareAbout { get; set; }
     }
 }
