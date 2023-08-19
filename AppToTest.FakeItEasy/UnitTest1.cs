@@ -35,7 +35,6 @@ namespace AppToTest.FakeItEasy
             Assert.That(SomethingToTestMock.SomeNumberICareAbout, Is.EqualTo(anotherNumberICareAbout));
         }
 
-
         [Test]
         public void Check_CallsCount()
         {
@@ -47,7 +46,6 @@ namespace AppToTest.FakeItEasy
             A.CallTo(() => SomethingToTestMock.SomethingToBeCalled(someString)).MustHaveHappened();
             A.CallTo(() => SomethingToTestMock.SomethingToBeIgnored(someString)).MustNotHaveHappened();
         }
-
 
         [Test]
         public void Call_BooleanMethods()
@@ -61,9 +59,32 @@ namespace AppToTest.FakeItEasy
         }
 
         [Test]
-        public void Call_GiveItBackToMeAltered()
+        public void Call_GiveItBackToMeAltered_ReturnStatic()
         {
-            // Todo
+            string someString = "SomeString";
+            string returnedString = "Altered";
+            var SomethingToTestMock = A.Fake<ISomethingToTest>();
+
+            A.CallTo(() => SomethingToTestMock.GiveItBackToMeAltered(someString))
+                .Returns(returnedString);
+
+            Assert.That(SomethingToTestMock.GiveItBackToMeAltered(someString), Is.EqualTo(returnedString));
+        }
+
+        [Test]
+        public void Call_GiveItBackToMeAltered_ReturnDynamic()
+        {
+            string someString = "SomeString";
+            string alterPrefix = "Altered";
+            var SomethingToTestMock = A.Fake<ISomethingToTest>();
+
+            A.CallTo(() => SomethingToTestMock.GiveItBackToMeAltered(A<string>.Ignored))
+                .ReturnsLazily((string it) =>
+                {
+                    return $"{alterPrefix} {it}";
+                });
+
+            Assert.That(SomethingToTestMock.GiveItBackToMeAltered(someString), Is.EqualTo($"{alterPrefix} {someString}"));
         }
     }
 }

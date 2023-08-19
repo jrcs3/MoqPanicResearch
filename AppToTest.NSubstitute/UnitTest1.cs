@@ -71,9 +71,32 @@ namespace AppToTest.NSubstitute
         }
 
         [Test]
-        public void Call_GiveItBackToMeAltered()
+        public void Call_GiveItBackToMeAltered_ReturnStatic()
         {
-            // Todo
+            string someString = "SomeString";
+            string returnedString = "Altered";
+            var SomethingToTestMock = Substitute.For<ISomethingToTest>();
+
+            SomethingToTestMock.GiveItBackToMeAltered(someString)
+                .Returns(returnedString);
+
+            Assert.That(SomethingToTestMock.GiveItBackToMeAltered(someString), Is.EqualTo(returnedString));
+        }
+
+        [Test]
+        public void Call_GiveItBackToMeAltered_ReturnDynamic()
+        {
+            string someString = "SomeString";
+            const string alterPrefix = "Altered";
+            var SomethingToTestMock = Substitute.For<ISomethingToTest>();
+
+            SomethingToTestMock.GiveItBackToMeAltered(Arg.Any<string>())
+                .Returns(it => 
+                { 
+                    return $"{alterPrefix} {it.ArgAt<string>(0)}"; 
+                });
+
+            Assert.That(SomethingToTestMock.GiveItBackToMeAltered(someString), Is.EqualTo($"{alterPrefix} {someString}"));
         }
     }
 }

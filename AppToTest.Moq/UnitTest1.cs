@@ -66,7 +66,20 @@ namespace AppToTest.Moq
         }
 
         [Test]
-        public void Call_GiveItBackToMeAltered()
+        public void Call_GiveItBackToMeAltered_ReturnStatic()
+        {
+            string someString = "SomeString";
+            string returnedString = "Altered";
+            var SomethingToTestMock = new Mock<ISomethingToTest>();
+
+            SomethingToTestMock.Setup(x => x.GiveItBackToMeAltered(someString))
+                .Returns(returnedString);
+
+            Assert.That(SomethingToTestMock.Object.GiveItBackToMeAltered(someString), Is.EqualTo(returnedString));
+        }
+
+        [Test]
+        public void Call_GiveItBackToMeAltered_ReturnDynamic()
         {
             string someString = "SomeString";
             string alterPrefix = "Altered";
