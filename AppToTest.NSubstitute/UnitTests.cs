@@ -5,16 +5,13 @@ namespace AppToTest.NSubstitute
 {
     public class Tests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         public void Call_GiveItBackToMe()
         {
             string someString = "SomeString";
+
             var SomethingToTestMock = Substitute.For<ISomethingToTest>();
+
             SomethingToTestMock.GiveItBackToMe(someString).Returns(someString);
 
             Assert.That(SomethingToTestMock.GiveItBackToMe(someString), Is.EqualTo(someString));
@@ -51,6 +48,7 @@ namespace AppToTest.NSubstitute
         public void Check_CallsCount()
         {
             string someString = "SomeString";
+
             var SomethingToTestMock = Substitute.For<ISomethingToTest>();
 
             SomethingToTestMock.SomethingToBeCalled(someString);
@@ -63,6 +61,7 @@ namespace AppToTest.NSubstitute
         public void Call_BooleanMethods()
         {
             var SomethingToTestMock = Substitute.For<ISomethingToTest>();
+
             SomethingToTestMock.ReturnTrue().Returns(true);
             SomethingToTestMock.ReturnFalse().Returns(false);
 
@@ -75,6 +74,7 @@ namespace AppToTest.NSubstitute
         {
             string someString = "SomeString";
             string returnedString = "Altered";
+
             var SomethingToTestMock = Substitute.For<ISomethingToTest>();
 
             SomethingToTestMock.GiveItBackToMeAltered(someString)
@@ -88,6 +88,7 @@ namespace AppToTest.NSubstitute
         {
             string someString = "SomeString";
             const string alterPrefix = "Altered";
+
             var SomethingToTestMock = Substitute.For<ISomethingToTest>();
 
             SomethingToTestMock.GiveItBackToMeAltered(Arg.Any<string>())

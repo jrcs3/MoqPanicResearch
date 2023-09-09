@@ -5,16 +5,13 @@ namespace AppToTest.FakeItEasy
 {
     public class Tests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         public void Call_GiveItBackToMe()
         {
             string someString = "SomeString";
+
             var SomethingToTestMock = A.Fake<ISomethingToTest>();
+
             A.CallTo(() => SomethingToTestMock.GiveItBackToMe(someString)).Returns(someString);
 
             Assert.That(SomethingToTestMock.GiveItBackToMe(someString), Is.EqualTo(someString));
@@ -39,6 +36,7 @@ namespace AppToTest.FakeItEasy
         public void Check_CallsCount()
         {
             string someString = "SomeString";
+
             var SomethingToTestMock = A.Fake<ISomethingToTest>();
 
             SomethingToTestMock.SomethingToBeCalled(someString);
@@ -51,6 +49,7 @@ namespace AppToTest.FakeItEasy
         public void Call_BooleanMethods()
         {
             var SomethingToTestMock = A.Fake<ISomethingToTest>();
+
             A.CallTo(() => SomethingToTestMock.ReturnTrue()).Returns(true);
             A.CallTo(() => SomethingToTestMock.ReturnFalse()).Returns(false);
 
@@ -63,6 +62,7 @@ namespace AppToTest.FakeItEasy
         {
             string someString = "SomeString";
             string returnedString = "Altered";
+
             var SomethingToTestMock = A.Fake<ISomethingToTest>();
 
             A.CallTo(() => SomethingToTestMock.GiveItBackToMeAltered(someString))
@@ -76,6 +76,7 @@ namespace AppToTest.FakeItEasy
         {
             string someString = "SomeString";
             string alterPrefix = "Altered";
+
             var SomethingToTestMock = A.Fake<ISomethingToTest>();
 
             A.CallTo(() => SomethingToTestMock.GiveItBackToMeAltered(A<string>.Ignored))

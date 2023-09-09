@@ -5,16 +5,13 @@ namespace AppToTest.Moq
 {
     public class Tests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         public void Call_GiveItBackToMe()
         {
             string someString = "SomeString";
+
             var SomethingToTestMock = new Mock<ISomethingToTest>();
+
             SomethingToTestMock.Setup(x => x.GiveItBackToMe(someString)).Returns(someString);
 
             Assert.That(SomethingToTestMock.Object.GiveItBackToMe(someString), Is.EqualTo(someString));
@@ -46,6 +43,7 @@ namespace AppToTest.Moq
         public void Check_CallsCount()
         {
             string someString = "SomeString";
+
             var SomethingToTestMock = new Mock<ISomethingToTest>();
 
             SomethingToTestMock.Object.SomethingToBeCalled(someString);
@@ -58,6 +56,7 @@ namespace AppToTest.Moq
         public void Call_BooleanMethods()
         {
             var SomethingToTestMock = new Mock<ISomethingToTest>();
+
             SomethingToTestMock.Setup(x => x.ReturnTrue()).Returns(true);
             SomethingToTestMock.Setup(x => x.ReturnFalse()).Returns(false);
 
@@ -70,6 +69,7 @@ namespace AppToTest.Moq
         {
             string someString = "SomeString";
             string returnedString = "Altered";
+
             var SomethingToTestMock = new Mock<ISomethingToTest>();
 
             SomethingToTestMock.Setup(x => x.GiveItBackToMeAltered(someString))
@@ -83,6 +83,7 @@ namespace AppToTest.Moq
         {
             string someString = "SomeString";
             string alterPrefix = "Altered";
+
             var SomethingToTestMock = new Mock<ISomethingToTest>();
 
             SomethingToTestMock.Setup(x => x.GiveItBackToMeAltered(It.IsAny<string>()))
